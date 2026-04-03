@@ -1,5 +1,7 @@
 """Simple router: dispatches prompts to providers and logs to session."""
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from provider import get_provider
 from session import SessionManager
 
@@ -13,15 +15,23 @@ def ask(provider_name: str, prompt: str, task_name: str = "default") -> str:
     return response
 
 
+def _call_provider(name: str, prompt: str) -> tuple[str, str]:
+    """Call a single provider, return (name, response)."""
+    provider = get_provider(name)
+    return name, provider.ask(prompt)
+
+
 def compare(provider_names: list[str], prompt: str, analyzer: str = "gemini", task_name: str = "default") -> tuple[dict[str, str], str]:
-    """Call multiple providers, then analyze with a designated model."""
+    """Call multiple providers in parallel, then analyze with a designated model."""
     results = {}
     session = SessionManager(task_name)
-    for name in provider_names:
-        provider = get_provider(name)
-        response = provider.ask(prompt)
-        results[name] = response
-        session.add_entry(name, prompt, response, kind="compare")
+
+    with ThreadPoolExecutor(max_workers=len(provider_names)) as pool:
+        futures = {pool.submit(_call_provider, name, prompt): name for name in provider_names}
+        for future in as_completed(futures):
+            name, response = future.result()
+            results[name] = response
+            session.add_entry(name, prompt, response, kind="compare")
 
     # Build analysis prompt from raw outputs (truncate long responses)
     MAX_RESPONSE_LEN = 4000
