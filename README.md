@@ -47,11 +47,9 @@ research-router-for-claude-code/
 
 | 模型 | CLI 命令 | 特点 |
 |------|---------|------|
-| **codex** | `codex.exe exec` | 代码能力强，技术判断可靠 |
+| **codex** | `codex exec` | 代码能力强，技术判断可靠 |
 | **gemini** | `gemini -p` | 研究分析、深度推理、中文好 |
 | **qwen** | `qwen` | 免费快速、中文友好、默认模型 |
-
-> GLM（Claude Code 自身）不作为 subprocess provider 调用。
 
 ## 命令详解
 
@@ -66,8 +64,8 @@ python main.py ask gemini "研究类问题" --task x  # 指定任务
 ### compare — 多模型比较
 
 ```bash
-python main.py compare "你的问题"                # 自动选模型
-python main.py compare gemini qwen "你的问题"    # 手动指定
+python main.py compare --prompt "你的问题"                # 自动选模型
+python main.py compare gemini qwen --prompt "你的问题"    # 手动指定
 ```
 
 输出包含 RAW OUTPUT + ANALYSIS（一致点、分歧点、风险点、建议）。
@@ -107,16 +105,22 @@ python main.py task show              # 查看当前任务历史
 
 **步骤 1：注册插件**
 
-编辑项目级 `.claude/settings.local.json`，添加 `enabledPlugins`：
+编辑 `~/.claude/settings.local.json`，添加 marketplace 和启用插件：
 
 ```json
 {
-  "permissions": { ... },
-  "enabledPlugins": {
-    "research-router": {
-      "localPath": "c:/Users/wei/Desktop/research-router-for-claude-code"
+  "extraKnownMarketplaces": {
+    "local": {
+      "source": {
+        "source": "directory",
+        "path": "<插件目录的绝对路径>"
+      }
     }
-  }
+  },
+  "enabledPlugins": {
+    "research-router@local": true
+  },
+  "permissions": { ... }
 }
 ```
 
@@ -153,7 +157,7 @@ skills/
 
 我会执行：
 ```bash
-python c:/Users/wei/Desktop/research-router-for-claude-code/main.py ask qwen "LSTM 和 GRU 在水文时序预测中哪个更合适？"
+python main.py ask qwen "LSTM 和 GRU 在水文时序预测中哪个更合适？"
 ```
 
 ### 方式 3：用提示模板
@@ -195,9 +199,9 @@ python c:/Users/wei/Desktop/research-router-for-claude-code/main.py ask qwen "LS
   "session_dir": "data/sessions",
   "default_analyzer": "qwen",
   "providers": {
-    "codex": { "command": ["codex.exe", "exec"], "timeout": 600, "use_stdin": false },
-    "qwen":  { "command": ["qwen"], "timeout": 600, "use_stdin": true },
-    "gemini":{ "command": ["gemini", "-p"], "timeout": 600, "use_stdin": false }
+    "codex": { "command": ["codex", "exec"], "timeout": 600 },
+    "qwen":  { "command": ["qwen"], "timeout": 600 },
+    "gemini":{ "command": ["gemini", "-p", ""], "timeout": 600 }
   }
 }
 ```
