@@ -3,19 +3,16 @@
   "default_analyzer": "qwen",
   "providers": {
     "codex": {
-      "command": ["codex.exe", "exec"],
-      "timeout": 600,
-      "use_stdin": false
+      "command": ["codex", "exec"],
+      "timeout": 600
     },
     "qwen": {
       "command": ["qwen"],
-      "timeout": 600,
-      "use_stdin": true
+      "timeout": 600
     },
     "gemini": {
-      "command": ["gemini", "-p"],
-      "timeout": 600,
-      "use_stdin": false
+      "command": ["gemini", "-p", ""],
+      "timeout": 600
     }
   }
 }

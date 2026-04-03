@@ -2,7 +2,11 @@
 
 import json
 import os
-import sys
+
+
+class ConfigNotFoundError(FileNotFoundError):
+    pass
+
 
 _CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 _config = None
@@ -15,14 +19,12 @@ def load_config() -> dict:
         return _config
 
     if not os.path.exists(_CONFIG_PATH):
-        print(
-            f"Error: config.json not found at {_CONFIG_PATH}\n"
+        raise ConfigNotFoundError(
+            f"config.json not found at {_CONFIG_PATH}\n"
             "Please create it. Example:\n"
             '{\n  "session_dir": "data/sessions",\n  "default_analyzer": "qwen",\n'
-            '  "providers": { ... }\n}',
-            file=sys.stderr,
+            '  "providers": { ... }\n}'
         )
-        sys.exit(1)
 
     with open(_CONFIG_PATH, "r", encoding="utf-8") as f:
         _config = json.load(f)

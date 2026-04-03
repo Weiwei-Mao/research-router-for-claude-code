@@ -24,6 +24,7 @@ sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 from router import ask, compare, review, synthesize
 from session import SessionManager
 import config
+from config import ConfigNotFoundError
 import strategy
 
 
@@ -42,8 +43,10 @@ def main():
 
     # compare
     compare_parser = subparsers.add_parser("compare", help="Compare multiple models")
-    compare_parser.add_argument("providers", nargs="+",
-                                help="Model providers followed by prompt, last arg is the prompt")
+    compare_parser.add_argument("providers", nargs="*",
+                                help="Model providers (default: auto-select via strategy)")
+    compare_parser.add_argument("--prompt", "-p", required=True,
+                                help="The question / prompt to compare")
     compare_parser.add_argument("--analyzer", default=config.get("default_analyzer", "qwen"),
                                 help=f"Model for analysis summary (default: {config.get('default_analyzer', 'qwen')})")
     compare_parser.add_argument("--task", default=current_task, help=f"Task name (current: '{current_task}')")
@@ -100,16 +103,11 @@ def main():
             sys.exit(1)
 
     elif args.command == "compare":
-        if len(args.providers) < 1:
-            print("Error: compare requires a prompt.", file=sys.stderr)
-            sys.exit(1)
-        # If only 1 arg, it's just the prompt — auto-select models
-        if len(args.providers) == 1:
-            prompt = args.providers[0]
+        prompt = args.prompt
+        if not args.providers:
             providers = strategy.get_default_compare_models(prompt)
         else:
-            providers = args.providers[:-1]
-            prompt = args.providers[-1]
+            providers = args.providers
         try:
             print(f"Comparing {', '.join(providers)} on: {prompt[:60]}...\n")
             results, analysis = compare(providers, prompt, analyzer=args.analyzer, task_name=args.task)
@@ -209,4 +207,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ConfigNotFoundError as e:
+        print(f"Config error: {e}", file=sys.stderr)
+        sys.exit(1)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)

@@ -23,8 +23,12 @@ def compare(provider_names: list[str], prompt: str, analyzer: str = "gemini", ta
         results[name] = response
         session.add_entry(name, prompt, response, kind="compare")
 
-    # Build analysis prompt from raw outputs
-    raw_section = "\n\n".join(f"[{name}]\n{resp}" for name, resp in results.items())
+    # Build analysis prompt from raw outputs (truncate long responses)
+    MAX_RESPONSE_LEN = 4000
+    raw_section = "\n\n".join(
+        f"[{name}]\n{resp[:MAX_RESPONSE_LEN]}{'...(truncated)' if len(resp) > MAX_RESPONSE_LEN else ''}"
+        for name, resp in results.items()
+    )
     analysis_prompt = (
         "You are a senior researcher. Multiple AI models answered the same question. "
         "Analyze their responses.\n\n"

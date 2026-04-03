@@ -29,14 +29,14 @@ The user should provide:
 3. Run the following command:
 
 ```bash
-C:/Users/wei/anaconda3/python.exe "c:/Users/wei/Desktop/research-router-for-claude-code/main.py" compare [MODEL1 MODEL2 ...] "PROMPT" [--analyzer ANALYZER] [--task TASK_NAME]
+C:/Users/wei/anaconda3/python.exe "c:/Users/wei/Desktop/research-router-for-claude-code/main.py" compare [MODEL1 MODEL2 ...] --prompt "PROMPT" [--analyzer ANALYZER] [--task TASK_NAME]
 ```
 
 Examples:
-- `main.py compare "what is overfitting?"` — auto-select models
-- `main.py compare gemini qwen "LSTM vs GRU"` — specify two models
-- `main.py compare codex gemini qwen "debug script"` — specify three models
-- `main.py compare gemini qwen "question" --analyzer qwen` — specify analyzer
+- `main.py compare --prompt "what is overfitting?"` — auto-select models
+- `main.py compare gemini qwen --prompt "LSTM vs GRU"` — specify two models
+- `main.py compare codex gemini qwen --prompt "debug script"` — specify three models
+- `main.py compare gemini qwen --prompt "question" --analyzer qwen` — specify analyzer
 
 4. The output has two sections:
    - **RAW OUTPUT**: Each model's full response

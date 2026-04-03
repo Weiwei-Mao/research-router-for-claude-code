@@ -1,5 +1,7 @@
 """Strategy system: auto-select default models based on command type and prompt content."""
 
+import re
+
 CODE_KEYWORDS = {"code", "python", "bug", "error", "script", "function", "debug",
                  "implement", "fix", "simulation", "refactor", "compile", "runtime"}
 RESEARCH_KEYWORDS = {"model", "research", "analysis", "hypothesis", "experiment",
@@ -13,7 +15,7 @@ QWEN = "qwen"
 
 def _has_keywords(text: str, keywords: set[str]) -> bool:
     lower = text.lower()
-    return any(kw in lower for kw in keywords)
+    return any(re.search(rf'\b{re.escape(kw)}\b', lower) for kw in keywords)
 
 
 def _is_code_related(prompt: str) -> bool:
@@ -50,8 +52,3 @@ def get_default_review_pair(prompt: str) -> tuple[str, str]:
     if _is_code_related(prompt):
         return CODEX, QWEN
     return QWEN, GEMINI
-
-
-def get_default_analyzer() -> str:
-    """Default analyzer for compare-analysis and synthesize."""
-    return QWEN

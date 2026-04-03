@@ -2,9 +2,12 @@
 
 import json
 import os
+import re
 from datetime import datetime
 
 import config
+
+_SAFE_NAME_RE = re.compile(r'^[a-zA-Z0-9_\-.]+$')
 
 
 def _sessions_dir() -> str:
@@ -13,10 +16,20 @@ def _sessions_dir() -> str:
     return path
 
 
+def _validate_task_name(name: str) -> str:
+    """Sanitize task_name: reject path traversal and special characters."""
+    if not name or not _SAFE_NAME_RE.match(name):
+        raise ValueError(
+            f"Invalid task name '{name}'. "
+            "Only letters, digits, hyphens, underscores, and dots are allowed."
+        )
+    return name
+
+
 class SessionManager:
     def __init__(self, task_name: str = "default"):
-        self.task_name = task_name
-        self.path = os.path.join(_sessions_dir(), f"{task_name}.json")
+        self.task_name = _validate_task_name(task_name)
+        self.path = os.path.join(_sessions_dir(), f"{self.task_name}.json")
         self.data = self._load()
 
     def _load(self) -> dict:
