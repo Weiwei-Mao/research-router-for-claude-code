@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+data/sessions/
+exports/
+.env
+.claude/

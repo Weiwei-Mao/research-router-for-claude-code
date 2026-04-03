@@ -1,0 +1,21 @@
+{
+  "session_dir": "data/sessions",
+  "default_analyzer": "qwen",
+  "providers": {
+    "codex": {
+      "command": ["codex.exe", "exec"],
+      "timeout": 600,
+      "use_stdin": false
+    },
+    "qwen": {
+      "command": ["qwen"],
+      "timeout": 600,
+      "use_stdin": true
+    },
+    "gemini": {
+      "command": ["gemini", "-p"],
+      "timeout": 600,
+      "use_stdin": false
+    }
+  }
+}

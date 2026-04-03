@@ -1,0 +1,6 @@
+{
+  "name": "research-router",
+  "version": "0.1.0",
+  "description": "Multi-model research assistant: ask, compare, review, synthesize via codex/gemini/qwen",
+  "skills": "./skills/"
+}
