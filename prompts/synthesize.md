@@ -11,7 +11,7 @@
 ```
 请帮我调用 research-router 总结当前任务的历史记录：
 
-python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize
+python main.py synthesize
 ```
 
 ---
@@ -21,7 +21,7 @@ python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize
 ```
 请帮我调用 research-router 总结任务 [任务名] 的历史记录：
 
-python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize --task [任务名]
+python main.py synthesize --task [任务名]
 ```
 
 ---
@@ -31,7 +31,7 @@ python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize -
 ```
 请帮我调用 research-router 用 [模型] 来总结任务历史：
 
-python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize --analyzer [qwen|gemini] --task [任务名]
+python main.py synthesize --analyzer [qwen|gemini] --task [任务名]
 ```
 
 ---
@@ -41,7 +41,7 @@ python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize -
 ```
 请帮我调用 research-router 总结 et-model 任务的所有讨论：
 
-python c:/Users/wei/Desktop/research-router-for-claude-code/main.py synthesize --task et-model
+python main.py synthesize --task et-model
 ```
 
 ---

@@ -33,7 +33,7 @@ Auto-selection rules:
 3. Run the following command:
 
 ```bash
-C:/Users/wei/anaconda3/python.exe "c:/Users/wei/Desktop/research-router-for-claude-code/main.py" review [EXECUTOR REVIEWER] "PROMPT" [--task TASK_NAME]
+python main.py review [EXECUTOR REVIEWER] "PROMPT" [--task TASK_NAME]
 ```
 
 Examples:

@@ -5,12 +5,9 @@
 ## 快速开始
 
 ```bash
-# Python 路径（如需要）
-C:\Users\wei\anaconda3\python.exe
-
 # 基本命令
 python main.py ask "你的问题"
-python main.py compare "你的问题"
+python main.py compare --prompt "你的问题"
 python main.py review "你的问题"
 python main.py synthesize
 

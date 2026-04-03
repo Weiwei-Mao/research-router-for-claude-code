@@ -26,7 +26,7 @@ The user should provide:
 2. Run the following command:
 
 ```bash
-C:/Users/wei/anaconda3/python.exe "c:/Users/wei/Desktop/research-router-for-claude-code/main.py" synthesize [--task TASK_NAME] [--analyzer ANALYZER]
+python main.py synthesize [--task TASK_NAME] [--analyzer ANALYZER]
 ```
 
 Examples:
